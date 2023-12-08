@@ -1,27 +1,36 @@
 import Modal from '../UI/Modal';
 import classes from './Cart.module.css';
-import React, { useContext, useState } from 'react';
-import CartContext from '../../store/cart-context';
+import React, { useState  } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { cartActions } from '../../store/cart';
+import { submitOrderAction } from '../../store/user';
+// import CartContext from '../../store/cart-context';
 import CartItem from './CartItem';
 import Checkout from './Checkout';
-import axios from 'axios';
+
 
 const Cart = (props) =>{
 
 const [isCheckOut,setIsCheckOut] = useState(false);    
 const [isSubmiting,setIsSubmiting] = useState(false);
 const [didSubmiting,setDidSubmiting] = useState(false);
-const cartCtx = useContext(CartContext);
 
-const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
-const hasItems = cartCtx.items.length>0;
+// const cartCtx = useContext(CartContext);
+const dispatch = useDispatch();
+const cart = useSelector(state=>state.cart);
+
+
+const totalAmount = `$${cart.totalAmount.toFixed(2)}`;
+const hasItems = cart.items.length>0;
 
 const cartItemRemoveHandler = (id) => {
-    cartCtx.removeItem(id);
+    // cartCtx.removeItem(id);
+    dispatch(cartActions.removeItem(id));
 };
 
 const cartItemAddHandler = (item) => {
-    cartCtx.addItem({...item,amount:1});
+    // cartCtx.addItem({...item,amount:1});
+    dispatch(cartActions.addItem({...item,amount:1}));
 };
 
 const orderHandler=(e)=>{
@@ -29,21 +38,20 @@ const orderHandler=(e)=>{
 }
 
 const submitOrderHandler = async(userData) => {
+
     setIsSubmiting(true);
-    const res = await axios.post('https://food-order-app-433bf-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json',{
-            user: userData,
-            orderedItems: cartCtx.items
-    })
+
+    submitOrderAction(userData, cart)(dispatch);
+    
     setIsSubmiting(false);
     setDidSubmiting(true);
-    cartCtx.clearCart();
-
+    // cartCtx.clearCart();
 }
 
 
 const cartItems = (<ul className={classes['cart-items']}>
                     {
-                        cartCtx.items.map((item) =>{
+                        cart.items.map((item) =>{
                             return <CartItem
                                 key={item.id}
                                 name={item.name}

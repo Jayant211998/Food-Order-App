@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 
 
 const Checkout = (props) => {
-    const [formInputvalidity,setFormInputValidity] = useState({
+    const [formInputValidity,setFormInputValidity] = useState({
         name:true,
         street:true,
         city:true,
@@ -36,6 +36,7 @@ const Checkout = (props) => {
         if(!isFormValid){
             return;
         }
+        
         props.onConfirm({
             name:enteredName,
             street:enteredStreet,
@@ -47,26 +48,26 @@ const Checkout = (props) => {
 
   return (
     <form className={classes.form} onSubmit={confirmHandler}>
-      <div className={`${classes.control} ${formInputvalidity.name?'':classes.invalid}`}>
+      <div className={`${classes.control} ${formInputValidity.name?'':classes.invalid}`}>
         <label htmlFor='name'>Your Name</label>
         <input type='text' id='name' ref={nameInputRef} />
-        {!formInputvalidity.name && <p>Please Enter a Valid Name</p> }
+        {!formInputValidity.name && <p>Please Enter a Valid Name</p> }
       </div>
-      <div className={`${classes.control} ${formInputvalidity.street?'':classes.invalid}`}>
+      <div className={`${classes.control} ${formInputValidity.street?'':classes.invalid}`}>
         <label htmlFor='street'>Street</label>
         <input type='text' id='street' ref={streetInputRef}/>
-        {!formInputvalidity.street && <p>Please Enter a Valid street</p> }
+        {!formInputValidity.street && <p>Please Enter a Valid street</p> }
       </div>
-      <div className={`${classes.control} ${formInputvalidity.postalCode?'':classes.invalid}`}>
+      <div className={`${classes.control} ${formInputValidity.postalCode?'':classes.invalid}`}>
         <label htmlFor='postal'>Postal Code</label>
         <input type='text' id='postal' ref={postalCodeInputRef}/>
-        {!formInputvalidity.postalCode && <p>Please Enter a Valid Postal Code.</p> }
+        {!formInputValidity.postalCode && <p>Please Enter a Valid Postal Code.</p> }
 
       </div>
-      <div className={`${classes.control} ${formInputvalidity.city?'':classes.invalid}`}>
+      <div className={`${classes.control} ${formInputValidity.city?'':classes.invalid}`}>
         <label htmlFor='city'>City</label>
         <input type='text' id='city' ref={cityInputRef}/>
-        {!formInputvalidity.name && <p>Please Enter a Valid </p> }
+        {!formInputValidity.name && <p>Please Enter a Valid </p> }
       </div>
       <div className={classes.actions}>
         <button type='button' onClick={props.onCancel}>
